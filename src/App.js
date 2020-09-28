@@ -6,29 +6,14 @@ import NavigationBar from "./components/NavigationBar"
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 
 
 function App() {
   return (
       <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/SearchWar">Search Wars</Link>
-              </li>
-              <li>
-                <Link to="/AddWar">Add wars</Link>
-              </li>
-            </ul>
-          </nav>
-
+        <NavigationBar/>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
@@ -42,7 +27,6 @@ function App() {
               <Home />
             </Route>
           </Switch>
-        </div>
       </Router>
   );
 }
