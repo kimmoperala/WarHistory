@@ -1,10 +1,11 @@
 import React from "react";
 
-function SearchWar(){
+function Home(){
   return(
       <h2>
-        ETSI SOTA!
+        ETUSIVU!
       </h2>
   )
 }
-export default SearchWar
+
+export default Home
