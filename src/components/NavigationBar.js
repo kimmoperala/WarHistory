@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {Navbar, Nav} from "react-bootstrap";
+import "../customcss/mystylesheet.css"
 
 function NavigationBar(){
   return (
@@ -9,9 +10,9 @@ function NavigationBar(){
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Link to="/">Home</Link>
-          <Link to="/SearchWar">Search Wars</Link>
-          <Link to="/AddWar">Add wars</Link>
+          <Link to="/" className="myLink">Home</Link>
+          <Link to="/SearchWar" className="myLink">Search Wars</Link>
+          <Link to="/AddWar" className="myLink">Add wars</Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
