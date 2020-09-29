@@ -18,3 +18,24 @@ body{
 .homePage p {
     font-size: 1.5em;
 }
+.homePage{
+    width: 100%;
+}
+
+.homePageLeft, .homePageRight{
+    width: 45%;
+    float:left;
+    margin-bottom: 3%;
+}
+
+.homePageLeft{
+    margin-right: 2%;
+}
+
+.homePageRight{
+    margin-left: 2%;
+}
+.homePageBottom{
+
+}
+
