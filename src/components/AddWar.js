@@ -31,7 +31,7 @@ function AddWar(){
     console.log(document.getElementById("startDate").value)
   }
   return (
-      <div className="AddForm">
+      <div className="addForm">
         <h2>Lisää tietokantaan puuttuvan sodan tiedot</h2>
         <form onSubmit={handleSubmit}>
           <table>
