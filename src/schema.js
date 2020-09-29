@@ -60,6 +60,6 @@ const WarSchema = new Schema({
   DurationY: {
     type: String
   }
-}, {collection: 'Wars'})
+}, {collection: 'TestWars'}, {versionKey: false})
 
 module.exports = mongoose.model('War', WarSchema)
