@@ -16,17 +16,19 @@ function App() {
         <NavigationBar/>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/SearchWar">
-              <SearchWar />
-            </Route>
-            <Route path="/AddWar">
-              <AddWar/>
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
+            <div className="pageWithoutNav">
+              <Switch>
+                <Route path="/SearchWar">
+                  <SearchWar />
+                </Route>
+                <Route path="/AddWar">
+                  <AddWar/>
+                </Route>
+                <Route path="/">
+                  <Home />
+                </Route>
+              </Switch>
+            </div>
       </Router>
   );
 }
