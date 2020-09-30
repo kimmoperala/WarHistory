@@ -9,95 +9,93 @@ const uri = process.env.REACT_APP_DB_CONNECTION
 // const router = express.Router()
 const War = require('./src/schema')
 
-mongoose.connect(uri, {useUnifiedTopology: true})
+mongoose.connect(uri, {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false })
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}) )
 
 // Routes
 
-// GET all the wars in the collection
-app.get("/wars/", function(req, res) {
-  console.log("Kaikki")
-  War.find({})
-      .then(wars => {
-        wars.forEach(war => {
-          console.log(war)
-        })
-      })
-      .catch(function(err) {
-        console.log(err)
-      })
-})
-
-// GET war by region, EXACT start year and/or EXACT end year, eg. /wars/multiple?startYear=1800&endYear=1900&region=3
-app.get("/wars/multiple", async function(req, res) {
-  const startYear = req.query.startYear
-  const endYear = req.query.endYear
-  const region = req.query.region
-
-  // Create query of the db depending which fields are present
+// GET war by different parameters, eg. /wars?warStarted=1900&warEnded=1905&numberActors=8
+// if no parameters, GET all wars
+app.get("/wars", async function(req, res) {
+  // Create query for the database depending which fields are present (excluded: countrycode, milfatalities, century, decade)
   var queryToMake = {}
-  if (startYear){
-    queryToMake.StartYear = startYear
-  }
-  if (endYear){
-    queryToMake.EndYear = endYear
-  }
-  if (region){
-    queryToMake.Region = region
-  }
-  console.log("queryToMake ", queryToMake)
-  const foundWars = await War.find(queryToMake)
-  res.send(foundWars)
-})
 
-
-// GET war by start year after lowLimit and end year before highLimit, eg. /wars/between?lowLimit=1000&highLimit=3000
-app.get("/wars/between", async function(req, res) {
-  const lowLimit = req.query.lowLimit
-  const highLimit = req.query.highLimit
-
-  var queryToMake = {}
-  if (lowLimit){
-    queryToMake.StartYear = {$gte: lowLimit}
-  }
-  if (highLimit){
-    queryToMake.EndYear = {$ne:"", $lte: highLimit}
-  } else {
-    // excludes the wars with empty EndYear
-    queryToMake.EndYear = {$ne:""}
-  }
-  console.log("lowLimit ", lowLimit, "highLimit", highLimit,"query ", queryToMake)
-  const foundWars = await War.find(queryToMake)
-  res.send(foundWars)
-})
-
-// GET war by name or part of a name  eg. /wars/name=hungarian
-app.get("/wars/name=:name", async function(req, res) {
-  const name = req.params.name
-  console.log("name ", name)
   // Either "Common name" or "Name" has "name" in it
-  const warsInRegion = await War.find({$or:[{"Common Name": {"$regex":name, "$options":"i"}}, {Name: {"$regex":name, "$options":"i"}}]})
-  res.send(warsInRegion)
+  if (req.query.name){
+    queryToMake = {$or:[{"Common Name": {"$regex":req.query.name, "$options":"i"}}, {Name: {"$regex":req.query.name, "$options":"i"}}]}
+  }
+  if (req.query.numberActors){
+    queryToMake.NumberActors = req.query.numberActors
+  }
+  if (req.query.totalFatalities){
+    queryToMake.TotalFatalities = req.query.totalFatalities
+  }
+  if (req.query.startDay){
+    queryToMake.StartDay = req.query.startDay
+  }
+  if (req.query.startMonth){
+    queryToMake.StartMonth = req.query.startMonth
+  }
+  if (req.query.startYear){
+    queryToMake.StartYear = req.query.startYear
+  }
+  if (req.query.endDay){
+    queryToMake.EndDay = req.query.endDay
+  }
+  if (req.query.endMonth){
+    queryToMake.EndMonth = req.query.endMonth
+  }
+  if (req.query.endYear){
+    queryToMake.EndYear = req.query.endYear
+  }
+  if (req.query.region){
+    queryToMake.Region = req.query.region
+  }
+
+  // The EXACT duration
+  if (req.query.durationD){
+    queryToMake.DurationD = req.query.durationD
+  }
+  if (req.query.durationM){
+    queryToMake.DurationM = req.query.durationM
+  }
+  if (req.query.durationY){
+    queryToMake.DurationY = req.query.durationY
+  }
+
+  // Length of the war in years
+  if (req.query.durationLess){
+    queryToMake.DurationY = {$ne:"", $lte: req.query.durationLess}
+  }
+
+  // EI TOIMI!
+  // if (req.query.durationMore){
+  //   queryToMake.DurationY = {$gte: req.query.durationMore}
+  // }
+
+  // War started on that year or later
+  if (req.query.warStarted){
+    queryToMake.StartYear = {$gte: req.query.warStarted}
+  }
+  // War ended on that year or earlier
+  if (req.query.warEnded){
+    queryToMake.EndYear = {$ne:"", $lte: req.query.warEnded}
+  }
+  console.log("query ", queryToMake)
+  // Returns
+  const foundWars = await War.find(queryToMake)
+  res.send(foundWars)
 })
 
-// GET war by region
-app.get("/wars/region=:region", async function(req, res) {
-  const region = req.params.region
-  console.log("reg ", region)
-  const warsInRegion = await War.find({Region: region})
-  res.send(warsInRegion)
-})
-
-// GET war by EXACT start year
-app.get("/wars/startYear=:startYear", async function(req, res) {
-  const startYear = req.params.startYear
-  console.log("startYear ", startYear)
-  const warsStarted = await War.find({StartYear: startYear})
-  res.send(warsStarted)
-})
-
+// // GET war by region (OTHER WAY)
+// app.get("/wars/regions/:region", async function(req, res) {
+//   const region = req.params.region
+//   console.log("reg ", region)
+//   const warsInRegion = await War.find({Region: region})
+//   res.send(warsInRegion)
+// })
 
 // CREATE new war. Give the new war in json format with all the required fields
 app.post("/wars", function(req, res) {
@@ -111,18 +109,28 @@ app.post("/wars", function(req, res) {
       })
 })
 
+// UPDATE a war. Send updatable data with json including the _id
+app.put("/wars", function(req, res) {
+  const id = req.body._id
+  War.findByIdAndUpdate(id, req.body, {new: true}, function(err, updatedWar) {
+    if (err) {
+      res.json(err)
+    } else {
+      res.json(updatedWar)
+    }
+  })
+})
+
 //DELETE a war. Give _id value of the to-be-deleted war.
 app.delete("/wars", function(req, res) {
-  const idToDelete = req.body._id
-  console.log(idToDelete)
-  War.findOneAndRemove({_id: idToDelete})
-      .then(function(deletedWar) {
-        res.json(deletedWar)
-        console.log("War deleted!")
-      })
-      .catch(function(err) {
-        res.json(err)
-      })
+  const id = req.body._id
+  War.findByIdAndRemove(id, function(err, deletedWar) {
+    if (err){
+      res.json(err)
+    } else {
+      res.json(deletedWar)
+    }
+  })
 })
 
 app.listen(port, () => {
