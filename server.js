@@ -6,7 +6,7 @@ const url = require('url')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 const uri = process.env.REACT_APP_DB_CONNECTION
-const router = express.Router()
+// const router = express.Router()
 const War = require('./src/schema')
 
 mongoose.connect(uri, {useUnifiedTopology: true})
@@ -65,13 +65,21 @@ app.get("/wars/between", async function(req, res) {
   if (highLimit){
     queryToMake.EndYear = {$ne:"", $lte: highLimit}
   } else {
+    // excludes the wars with empty EndYear
     queryToMake.EndYear = {$ne:""}
   }
-  // {StartYear: {$gte: lowLimit}, EndYear: {$ne:"", $lte: highLimit} }
   console.log("lowLimit ", lowLimit, "highLimit", highLimit,"query ", queryToMake)
-  // End year can't be empty
   const foundWars = await War.find(queryToMake)
   res.send(foundWars)
+})
+
+// GET war by name or part of a name  eg. /wars/name=hungarian
+app.get("/wars/name=:name", async function(req, res) {
+  const name = req.params.name
+  console.log("name ", name)
+  // Either "Common name" or "Name" has "name" in it
+  const warsInRegion = await War.find({$or:[{"Common Name": {"$regex":name, "$options":"i"}}, {Name: {"$regex":name, "$options":"i"}}]})
+  res.send(warsInRegion)
 })
 
 // GET war by region
@@ -91,7 +99,7 @@ app.get("/wars/startYear=:startYear", async function(req, res) {
 })
 
 
-// CREATE new war. Give the required fields in json
+// CREATE new war. Give the new war in json format with all the required fields
 app.post("/wars", function(req, res) {
   War.create(req.body)
       .then(function(newWar) {
