@@ -38,4 +38,7 @@ body{
 .homePageBottom{
 
 }
+.addForm table {
+    border: solid black 1px;
+}
 
