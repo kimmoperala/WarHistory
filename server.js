@@ -9,10 +9,13 @@ const uri = process.env.REACT_APP_DB_CONNECTION
 // const router = express.Router()
 const War = require('./src/schema')
 
+const cors = require('cors')
+
 mongoose.connect(uri, {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false })
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}) )
+app.use(cors())
 
 // Routes
 

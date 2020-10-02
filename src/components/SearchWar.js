@@ -1,7 +1,11 @@
 import React from "react";
+import {useState} from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 
 function SearchWar(){
+
+  const [startYear, setStartYear] = useState("");
+  const [endYear, setEndYear] = useState("");
 
   let regions = [
     "Pohjois- ja Väli-Amerikka sekä Karibia",
@@ -17,12 +21,20 @@ function SearchWar(){
     "Kaakkois-Aasia",
     "Itä-Aasia"]
 
-  function handleAllCheck(){
-    
-  }
+  function handleClick(){
+    let data = {
+      query: {
+        StartYear: {startYear},
+        EndYear: {endYear}
+      }
+    }
 
-  function handleSubmit(e){
-    e.preventDefault();
+    console.log(data);
+
+    fetch('http://localhost:3001/wars?' + 'warStarted=' + startYear + '&' + 'warEnded=' + endYear)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
   }
 
 
@@ -31,19 +43,21 @@ function SearchWar(){
       <h2>
         ETSI SOTA!
       </h2>
-      <Form onSubmit={e => handleSubmit(e)}>
+      <Form>
         <Form.Group as={Col} md="4">
-          <Form.Label>Start year</Form.Label>
+          <Form.Label>Aloitus vuosi</Form.Label>
           <Form.Control
             type="text"
+            onChange={e => setStartYear(e.target.value)}
           />
 
         </Form.Group>
 
         <Form.Group as={Col} md="4">
-          <Form.Label>End year</Form.Label>
+          <Form.Label>Lopetus vuosi</Form.Label>
           <Form.Control
             type="text"
+            onChange={e => setEndYear(e.target.value)}
           />
         </Form.Group>
 
@@ -61,7 +75,7 @@ function SearchWar(){
         </Form.Group>
 
         <Form.Group>
-          <Button type="submit">Hae</Button>
+          <Button onClick={handleClick}>Hae</Button>
         </Form.Group>
       </Form>
     </div>
