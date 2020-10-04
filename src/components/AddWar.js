@@ -13,7 +13,7 @@ function AddWar(){
   const [totalFatalities, setTotalFatalities] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [region, setRegion] = useState();
+  const [region, setRegion] = useState("Pohjois- ja Väli-Amerikka sekä Karibia");
 
   const regions = [
     ["Pohjois- ja Väli-Amerikka sekä Karibia", 1],
@@ -38,27 +38,34 @@ function AddWar(){
   }, [])
   function handleSubmit(event){
     event.preventDefault();
-    console.log(known, name, count, milFatalities, totalFatalities, startDate, endDate, region)
+    console.log(known, name, count, milFatalities, totalFatalities, startDate.split("-")[0], endDate, region)
+    let startYear = startDate.split("-")[0]
+    let startDay = startDate.split("-")[1]
+    let startMonth = startDate.split("-")[2]
+    let endYear = endDate.split("-")[0]
+    let endDay = endDate.split("-")[1]
+    let endMonth = endDate.split("-")[2]
     let data = {
       query: {
-        CommonName: {known}.value,
-        Name: {name}.value,
-        NumberActors: {count}.value,
-        MilFatalities: {milFatalities}.value,
-        TotalFatalities: {totalFatalities}.value,
-        //StartYear: {},
-        //StartMonth: {},
-        //StartDay: {},
-        //EndYear: {},
-        //EndMonth: {},
-        //EndDay: {},
-        Region: {region}.value
+        CommonName: known,
+        Name: name,
+        NumberActors: count,
+        MilFatalities: milFatalities,
+        TotalFatalities: totalFatalities,
+        StartYear: startYear,
+        StartMonth: startMonth,
+        StartDay: startDay,
+        EndYear: endYear,
+        EndMonth: endMonth,
+        EndDay: endDay,
+        Region: region
         //DurationD: {},
         //DurationM: {},
         //DurationÝ: {},
 
       }
     }
+    console.log(data);
     axios.post("http://localhost:3001/wars", data).then(response => response.data);
 
   }
