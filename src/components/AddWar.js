@@ -46,7 +46,6 @@ function AddWar(){
     let endDay = endDate.split("-")[1]
     let endMonth = endDate.split("-")[2]
     let data = {
-      query: {
         CommonName: known,
         Name: name,
         NumberActors: count,
@@ -62,8 +61,6 @@ function AddWar(){
         //DurationD: {},
         //DurationM: {},
         //DurationÝ: {},
-
-      }
     }
     console.log(data);
     axios.post("http://localhost:3001/wars", data).then(response => response.data);
