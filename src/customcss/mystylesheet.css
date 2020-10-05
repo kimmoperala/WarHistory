@@ -42,3 +42,6 @@ body{
     border: solid black 1px;
 }
 
+.totalNumbers {
+    font-weight: bold;
+}

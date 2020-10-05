@@ -35,53 +35,41 @@ function Home(){
 
   useEffect(() => {
     allData.forEach(function(el) {
-      if(el.Region == 1){
+      if(el.Region === "1"){
         setReg1(reg1 => reg1 + 1)
-        console.log("yks")
       }
-      if(el.Region == 2){
+      if(el.Region === "2"){
         setReg2(reg2 => reg2 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 3){
+      if(el.Region === "3"){
         setReg3(reg3 => reg3 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 4){
+      if(el.Region === "4"){
         setReg4(reg4 => reg4 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 5){
+      if(el.Region === "5"){
         setReg5(reg5 => reg5 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 6){
+      if(el.Region === "6"){
         setReg6(reg6 => reg6 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 7){
+      if(el.Region === "7"){
         setReg7(reg7 => reg7 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 8){
+      if(el.Region === "8"){
         setReg8(reg8 => reg8 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 9){
+      if(el.Region === "9"){
         setReg9(reg9 => reg9 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 10){
+      if(el.Region === "10"){
         setReg10(reg10 => reg10 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 11){
+      if(el.Region === "11"){
         setReg11(reg11 => reg11 + 1)
-        console.log("kaks")
       }
-      if(el.Region == 12){
+      if(el.Region === "12"){
         setReg12(reg12 => reg12 + 1)
-        console.log("kaks")
       }
     })
     console.log(allData)
@@ -98,22 +86,22 @@ function Home(){
           maantieteellisellä sijainnilla.
         </p>
         <div className="homePageLeft">
-          Tietokannasta löytyy yhteensä <span style={{fontWeight: "bold"}} >
-          <div>
+          Tietokannasta löytyy yhteensä<br/>
+          <span className="totalNumbers">
             {allData.length}
-          </div>
-        </span> sotaa. Sodat jakautuvat seuraaviin alueisiin: Pohjois- ja Väli-Amerikka  sekä Karibia {reg1} <br />
-          Etelä-Amerikka {reg2}<br/>
-          Länsi-Eurooppa {reg3}<br/>
-          Itä-Eurooppa {reg4}<br/>
-          Lähi-Itä {reg5}<br/>
-          Pohjois-Afrikka {reg6}<br/>
-          Keski- ja Länsi-Afrikka {reg7}<br/>
-          Etelä- ja Itä-Afrikka {reg8}<br/>
-          Keski-Aasia {reg9}<br/>
-          Etelä-Aasia {reg10}<br/>
-          Kaakkois-Aasia {reg11}<br/>
-          Itä-Aasia {reg12}<br/>
+          </span> sotaa. Sodat jakautuvat seuraaviin alueisiin:<br/>
+          Pohjois- ja Väli-Amerikka  sekä Karibia <span className="totalNumbers">{reg1}</span><br/>
+          Etelä-Amerikka <span className="totalNumbers">{reg2}</span><br/>
+          Länsi-Eurooppa <span className="totalNumbers">{reg3}</span><br/>
+          Itä-Eurooppa <span className="totalNumbers">{reg4}</span><br/>
+          Lähi-Itä <span className="totalNumbers">{reg5}</span><br/>
+          Pohjois-Afrikka <span className="totalNumbers">{reg6}</span><br/>
+          Keski- ja Länsi-Afrikka <span className="totalNumbers">{reg7}</span><br/>
+          Etelä- ja Itä-Afrikka <span className="totalNumbers">{reg8}</span><br/>
+          Keski-Aasia <span className="totalNumbers">{reg9}</span><br/>
+          Etelä-Aasia <span className="totalNumbers">{reg10}</span><br/>
+          Kaakkois-Aasia <span className="totalNumbers">{reg11}</span><br/>
+          Itä-Aasia <span className="totalNumbers">{reg12}</span><br/>
         </div>
         <div className="homePageRight">
           Sivustolla voit tehdä hakuja tietokantaan sekä lisätä uusia sotia.
