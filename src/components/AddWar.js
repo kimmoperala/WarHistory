@@ -52,11 +52,11 @@ function AddWar(){
     event.preventDefault();
     console.log(known, name, count, milFatalities, totalFatalities, startDate.split("-")[0], endDate, region)
     let startYear = startDate.split("-")[0]
-    let startDay = startDate.split("-")[1]
-    let startMonth = startDate.split("-")[2]
+    let startDay = startDate.split("-")[2]
+    let startMonth = startDate.split("-")[1]
     let endYear = endDate.split("-")[0]
-    let endDay = endDate.split("-")[1]
-    let endMonth = endDate.split("-")[2]
+    let endDay = endDate.split("-")[2]
+    let endMonth = endDate.split("-")[1]
     let totalDurationInDays = calculateDays(endYear, endMonth, endDay, startYear, startMonth, startDay)
     let durationInYears = Math.floor(totalDurationInDays/365);
     let durationInMonths = Math.floor((totalDurationInDays % 365) / 30);
@@ -74,14 +74,13 @@ function AddWar(){
         EndYear: endYear,
         EndMonth: endMonth,
         EndDay: endDay,
-        Region: region
-        //DurationD: {},
-        //DurationM: {},
-        //DurationY: {},
+        Region: region,
+        DurationD: durationInDays,
+        DurationM: durationInMonths,
+        DurationY: durationInYears
     }
     console.log(data);
-    /*axios.post("http://localhost:3001/wars", data).then(response =>" +
-    " response.data);*/
+    axios.post("http://localhost:3001/wars", data).then(response => response.data);
     resetDefaultValues();
 
   }
