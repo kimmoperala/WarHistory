@@ -89,7 +89,7 @@ app.get("/wars", async function(req, res) {
   console.log("query ", queryToMake)
   // Returns
   const foundWars = await War.find(queryToMake)
-  res.send(foundWars)
+  res.json(foundWars)
 })
 
 // // GET war by region (OTHER WAY)
