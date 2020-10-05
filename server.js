@@ -102,6 +102,7 @@ app.get("/wars", async function(req, res) {
 
 // CREATE new war. Give the new war in json format with all the required fields
 app.post("/wars", function(req, res) {
+  console.log(req.body.query)
   War.create(req.body)
       .then(function(newWar) {
         res.json(newWar)
