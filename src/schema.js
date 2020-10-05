@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 // Select the collection to use! (TestWars for testing, Wars for the actual use)
-const collection = "Wars"
+const collection = "TestWars"
 
 const WarSchema = new Schema({
   CommonName: {

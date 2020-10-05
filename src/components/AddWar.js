@@ -6,14 +6,14 @@ const axios = require('axios');
 
 function AddWar(){
   const [options, setOptions] = useState(null);
-  const [known, setKnown] = useState();
-  const [name, setName] = useState();
-  const [count, setCount] = useState();
-  const [milFatalities, setMilFatalities] = useState();
-  const [totalFatalities, setTotalFatalities] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [region, setRegion] = useState("Pohjois- ja Väli-Amerikka sekä Karibia");
+  const [known, setKnown] = useState("");
+  const [name, setName] = useState("");
+  const [count, setCount] = useState(0);
+  const [milFatalities, setMilFatalities] = useState(0);
+  const [totalFatalities, setTotalFatalities] = useState(0);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [region, setRegion] = useState(1);
 
   const regions = [
     ["Pohjois- ja Väli-Amerikka sekä Karibia", 1],
@@ -36,6 +36,18 @@ function AddWar(){
     })
     setOptions(temp);
   }, [])
+  function resetDefaultValues(){
+    setKnown("");
+    setName("");
+    setCount(0);
+    setMilFatalities(0);
+    setTotalFatalities(0);
+    setStartDate(null);
+    setEndDate(null);
+    setRegion(1);
+    document.getElementById("addForm").reset();
+
+  }
   function handleSubmit(event){
     event.preventDefault();
     console.log(known, name, count, milFatalities, totalFatalities, startDate.split("-")[0], endDate, region)
@@ -45,6 +57,11 @@ function AddWar(){
     let endYear = endDate.split("-")[0]
     let endDay = endDate.split("-")[1]
     let endMonth = endDate.split("-")[2]
+    let totalDurationInDays = calculateDays(endYear, endMonth, endDay, startYear, startMonth, startDay)
+    let durationInYears = Math.floor(totalDurationInDays/365);
+    let durationInMonths = Math.floor((totalDurationInDays % 365) / 30);
+    let durationInDays = Math.floor((totalDurationInDays % 365) % 30);
+    console.log(totalDurationInDays, durationInYears, durationInMonths, durationInDays)
     let data = {
         CommonName: known,
         Name: name,
@@ -60,16 +77,29 @@ function AddWar(){
         Region: region
         //DurationD: {},
         //DurationM: {},
-        //DurationÝ: {},
+        //DurationY: {},
     }
     console.log(data);
-    axios.post("http://localhost:3001/wars", data).then(response => response.data);
+    /*axios.post("http://localhost:3001/wars", data).then(response =>" +
+    " response.data);*/
+    resetDefaultValues();
 
   }
+
+  function calculateDays(endYear, endMonth, endDay, startYear, startMonth, startDay){
+    let days = 0;
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(startYear, startMonth, startDay);
+    const secondDate = new Date(endYear, endMonth, endDay);
+
+    days = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+    return days
+  }
+
   return (
-      <div className="addForm">
+      <div className="addWar">
         <h2>Lisää tietokantaan puuttuvan sodan tiedot</h2>
-        <form onSubmit={handleSubmit}>
+        <form id="addForm" onSubmit={handleSubmit}>
           <table>
             <tbody>
               <tr>
@@ -78,19 +108,19 @@ function AddWar(){
               </tr>
               <tr>
                 <td>Sodan osapuolet/nimi</td>
-                <td><input type="text" id="name" size="50" onChange={e => setName(e.target.value)}/></td>
+                <td><input type="text" id="name" size="50" onChange={e => setName(e.target.value)} required/></td>
               </tr>
               <tr>
                 <td>Sotaan osallistuneiden maiden lukumäärä</td>
-                <td><input type="number" id="count" onChange={e => setCount(e.target.value)}/></td>
+                <td><input type="number" id="count" min="1" onChange={e => setCount(e.target.value)}/></td>
               </tr>
               <tr>
                 <td>Kuolleiden sotilaiden määrä</td>
-                <td><input type="number" id="milFatalities" onChange={e => setMilFatalities(e.target.value)}/></td>
+                <td><input type="number" id="milFatalities" min="0" onChange={e => setMilFatalities(e.target.value)}/></td>
               </tr>
               <tr>
                 <td>Kuolleiden määrä yhteensä</td>
-                <td><input type="number" id="totalFatalities" onChange={e => setTotalFatalities(e.target.value)}/></td>
+                <td><input type="number" id="totalFatalities" min={milFatalities} onChange={e => setTotalFatalities(e.target.value)}/></td>
               </tr>
               <tr>
                 <td>Sodan aloituspäivämäärä</td>
@@ -98,7 +128,7 @@ function AddWar(){
               </tr>
               <tr>
                 <td>Sodan lopetuspäivämäärä</td>
-                <td><input type="date" id="endDate" onChange={e => setEndDate(e.target.value)} required/></td>
+                <td><input type="date" id="endDate" min={startDate} onChange={e => setEndDate(e.target.value)} required/></td>
               </tr>
               <tr>
                 <td>Sodan pääasiallinen sijainti</td>
