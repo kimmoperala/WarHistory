@@ -72,22 +72,21 @@ app.get("/wars", async function(req, res) {
   if (req.query.durationLess){
     queryToMake.DurationY = {$ne:"", $lte: req.query.durationLess}
   }
-
-  // EI TOIMI!
+  // EI TOIMI koska numerot stringeinä tietokannassa!
   // if (req.query.durationMore){
-  //   queryToMake.DurationY = {$gte: req.query.durationMore}
+  //   queryToMake.DurationY = {$gte: parseInt(req.query.durationMore)}
   // }
 
   // War started on that year or later
   if (req.query.warStarted){
-    queryToMake.StartYear = {$gte: req.query.warStarted}
+    queryToMake.StartYear = {$gte: parseInt(req.query.warStarted)}
   }
   // War ended on that year or earlier
   if (req.query.warEnded){
-    queryToMake.EndYear = {$ne:"", $lte: req.query.warEnded}
+    queryToMake.EndYear = {$ne:"", $lte: parseInt(req.query.warEnded)}
   }
   console.log("query ", queryToMake)
-  // Returns
+  // Returns wars of that query
   const foundWars = await War.find(queryToMake)
   res.json(foundWars)
 })

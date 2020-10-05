@@ -45,3 +45,6 @@ body{
 .totalNumbers {
     font-weight: bold;
 }
+.homepicture {
+    max-width: 100%;
+}

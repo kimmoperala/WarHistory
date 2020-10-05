@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import "../customcss/mystylesheet.css"
+import picture from "../img/gladiator-1931077_1280.jpg"
 
 function Home(){
   const [allData, setAllData] = useState([])
-  const [jsonExample, setJsonExample] = useState("")
   const [reg1, setReg1] = useState(0)
   const [reg2, setReg2] = useState(0)
   const [reg3, setReg3] = useState(0)
@@ -72,7 +72,6 @@ function Home(){
         setReg12(reg12 => reg12 + 1)
       }
     })
-    console.log(allData)
   },[allData])
 
   return(
@@ -90,33 +89,29 @@ function Home(){
           <span className="totalNumbers">
             {allData.length}
           </span> sotaa. Sodat jakautuvat seuraaviin alueisiin:<br/>
-          Pohjois- ja Väli-Amerikka  sekä Karibia <span className="totalNumbers">{reg1}</span><br/>
-          Etelä-Amerikka <span className="totalNumbers">{reg2}</span><br/>
-          Länsi-Eurooppa <span className="totalNumbers">{reg3}</span><br/>
-          Itä-Eurooppa <span className="totalNumbers">{reg4}</span><br/>
-          Lähi-Itä <span className="totalNumbers">{reg5}</span><br/>
-          Pohjois-Afrikka <span className="totalNumbers">{reg6}</span><br/>
-          Keski- ja Länsi-Afrikka <span className="totalNumbers">{reg7}</span><br/>
-          Etelä- ja Itä-Afrikka <span className="totalNumbers">{reg8}</span><br/>
-          Keski-Aasia <span className="totalNumbers">{reg9}</span><br/>
-          Etelä-Aasia <span className="totalNumbers">{reg10}</span><br/>
-          Kaakkois-Aasia <span className="totalNumbers">{reg11}</span><br/>
-          Itä-Aasia <span className="totalNumbers">{reg12}</span><br/>
+          Pohjois- ja Väli-Amerikka  sekä Karibia <span className="totalNumbers">{reg1}</span> sotaa<br/>
+          Etelä-Amerikka <span className="totalNumbers">{reg2}</span> sotaa<br/>
+          Länsi-Eurooppa <span className="totalNumbers">{reg3}</span> sotaa<br/>
+          Itä-Eurooppa <span className="totalNumbers">{reg4}</span> sotaa<br/>
+          Lähi-Itä <span className="totalNumbers">{reg5}</span> sotaa<br/>
+          Pohjois-Afrikka <span className="totalNumbers">{reg6}</span> sotaa<br/>
+          Keski- ja Länsi-Afrikka <span className="totalNumbers">{reg7}</span> sotaa<br/>
+          Etelä- ja Itä-Afrikka <span className="totalNumbers">{reg8}</span> sotaa<br/>
+          Keski-Aasia <span className="totalNumbers">{reg9}</span> sotaa<br/>
+          Etelä-Aasia <span className="totalNumbers">{reg10}</span> sotaa<br/>
+          Kaakkois-Aasia <span className="totalNumbers">{reg11}</span> sotaa<br/>
+          Itä-Aasia <span className="totalNumbers">{reg12}</span> sotaa<br/>
         </div>
         <div className="homePageRight">
           Sivustolla voit tehdä hakuja tietokantaan sekä lisätä uusia sotia.
-          Hakuja voi tehdä useilla eri hakuvaihtoehdoilla.
+          Hakuja voi tehdä useilla eri hakuvaihtoehdoilla.<br/>
+          Palautettava JSON on muodossa:<br/>
+          <div>
+            {JSON.stringify(allData[0], null, 2)}
+          </div>
         </div>
         <div className="homePageBottom">
-          ALASLorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s
-          with the release of Letraset sheets containing Lorem Ipsum passages,
-          and more recently with desktop publishing software like Aldus
-          PageMaker including versions of Lorem Ipsum.
+          <img src={picture} className="homepicture" responsive alt="Picture of warfare"/>
         </div>
       </div>
   )
