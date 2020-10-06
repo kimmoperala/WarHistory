@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-// Select the collection to use! (TestWars for testing, Wars for the actual use)
-const collection = "TestWars"
+// Select the collection to use! (TestiSodat for testing, Sodat for the actual use)
+const collection = "Sodat"
 
 const WarSchema = new Schema({
   CommonName: {
@@ -15,52 +15,52 @@ const WarSchema = new Schema({
     type: String
   },
   NumberActors: {
-    type: String
+    type: Number
   },
   MilFatalities: {
-    type: String
+    type: Number
   },
   TotalFatalities: {
-    type: String
+    type: Number
   },
   StartYear: {
-    type: String,
+    type: Number,
     required: true
   },
   StartMonth: {
-    type: String
+    type: Number
   },
   StartDay: {
-    type: String
+    type: Number
   },
   EndYear: {
-    type: String,
+    type: Number,
     required: true
   },
   EndMonth: {
-    type: String
+    type: Number
   },
   EndDay: {
-    type: String
+    type: Number
   },
   Region: {
-    type: String,
+    type: Number,
     required: true
   },
   Century: {
-    type: String
+    type: Number
   },
   Decade: {
-    type: String
+    type: Number
   },
   DurationD: {
-    type: String
+    type: Number
   },
   DurationM: {
-    type: String
+    type: Number
   },
   DurationY: {
-    type: String
+    type: Number
   }
 }, {collection: collection}, {versionKey: false})
 

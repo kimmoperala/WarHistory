@@ -35,40 +35,40 @@ function Home(){
 
   useEffect(() => {
     allData.forEach(function(el) {
-      if(el.Region === "1"){
+      if(el.Region === 1){
         setReg1(reg1 => reg1 + 1)
       }
-      if(el.Region === "2"){
+      if(el.Region === 2){
         setReg2(reg2 => reg2 + 1)
       }
-      if(el.Region === "3"){
+      if(el.Region === 3){
         setReg3(reg3 => reg3 + 1)
       }
-      if(el.Region === "4"){
+      if(el.Region === 4){
         setReg4(reg4 => reg4 + 1)
       }
-      if(el.Region === "5"){
+      if(el.Region === 5){
         setReg5(reg5 => reg5 + 1)
       }
-      if(el.Region === "6"){
+      if(el.Region === 6){
         setReg6(reg6 => reg6 + 1)
       }
-      if(el.Region === "7"){
+      if(el.Region === 7){
         setReg7(reg7 => reg7 + 1)
       }
-      if(el.Region === "8"){
+      if(el.Region === 8){
         setReg8(reg8 => reg8 + 1)
       }
-      if(el.Region === "9"){
+      if(el.Region === 9){
         setReg9(reg9 => reg9 + 1)
       }
-      if(el.Region === "10"){
+      if(el.Region === 10){
         setReg10(reg10 => reg10 + 1)
       }
-      if(el.Region === "11"){
+      if(el.Region === 11){
         setReg11(reg11 => reg11 + 1)
       }
-      if(el.Region === "12"){
+      if(el.Region === 12){
         setReg12(reg12 => reg12 + 1)
       }
     })

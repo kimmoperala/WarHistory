@@ -72,10 +72,9 @@ app.get("/wars", async function(req, res) {
   if (req.query.durationLess){
     queryToMake.DurationY = {$ne:"", $lte: req.query.durationLess}
   }
-  // EI TOIMI koska numerot stringeinä tietokannassa!
-  // if (req.query.durationMore){
-  //   queryToMake.DurationY = {$gte: parseInt(req.query.durationMore)}
-  // }
+  if (req.query.durationMore){
+    queryToMake.DurationY = {$gte: parseInt(req.query.durationMore)}
+  }
 
   // War started on that year or later
   if (req.query.warStarted){
