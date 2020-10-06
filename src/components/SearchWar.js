@@ -149,12 +149,43 @@ function SearchWar(){
 
   function handleDeleteClick(war){
 
+    console.log(war._id);
 
-    let tempWars = Array.from(wars);
-    tempWars.splice(tempWars.indexOf(war), 1);
-    setWars(tempWars);
+    let data = {
+      _id: war._id
+    }
+    console.log(data);
+    axios.delete('http://localhost:3001/wars', {
+      headers: 
+      { 
+      'Content-type': 'application/json'
+      },
+      _id: war._id
+    }
+    )
+    /*.then(r => {
+      if(r.status === 200){
+        let temp = {
+          variant: "success",
+          text: "Tiedot päivitetty onnistuneesti"
+        }
+        setAlertConfig(temp);
+        setshowEditStatus(true);
 
+        let tempWars = Array.from(wars);
+        tempWars.splice(tempWars.indexOf(war), 1);
+        setWars(tempWars);
+      }else{
+        let temp = {
+          variant: "danger",
+          text: "Jokin meni vikaan tietoja päivitettäessä"
+        }
+        setAlertConfig(temp);
+        setshowEditStatus(true);
+      }
 
+    })*/
+    .catch(e => console.log(e))
   }
 
   function getRegionByNumber(number){
