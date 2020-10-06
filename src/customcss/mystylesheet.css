@@ -67,3 +67,8 @@ body{
 .confirmationMessage{
     color: forestgreen;
 }
+
+.resTable {
+    max-height: 600px;
+    overflow-y: scroll;
+}

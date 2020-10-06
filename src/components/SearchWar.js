@@ -171,6 +171,7 @@ function SearchWar(){
       </Form>
 
       {wars &&
+      <div className="resTable">
       <Table bordered className="searchResultTable" striped>
         <thead>
           <tr>
@@ -195,6 +196,7 @@ function SearchWar(){
         ))}
         </tbody>
       </Table>
+      </div>
       }
     </div>
   )
