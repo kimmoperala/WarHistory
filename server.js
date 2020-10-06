@@ -32,43 +32,43 @@ app.get("/wars", async function(req, res) {
     queryToMake = {$or:[{"Common Name": {"$regex":req.query.name, "$options":"i"}}, {Name: {"$regex":req.query.name, "$options":"i"}}]}
   }
   if (req.query.numberActors){
-    queryToMake.NumberActors = req.query.numberActors
+    queryToMake.NumberActors = parseInt(req.query.numberActors)
   }
   if (req.query.totalFatalities){
-    queryToMake.TotalFatalities = req.query.totalFatalities
+    queryToMake.TotalFatalities = parseInt(req.query.totalFatalities)
   }
   if (req.query.milFatalities){
-    queryToMake.MilFatalities = req.query.milFatalities
+    queryToMake.MilFatalities = parseInt(req.query.milFatalities)
   }
   if (req.query.startDay){
-    queryToMake.StartDay = req.query.startDay
+    queryToMake.StartDay = parseInt(req.query.startDay)
   }
   if (req.query.startMonth){
-    queryToMake.StartMonth = req.query.startMonth
+    queryToMake.StartMonth = parseInt(req.query.startMonth)
   }
   if (req.query.startYear){
-    queryToMake.StartYear = req.query.startYear
+    queryToMake.StartYear = parseInt(req.query.startYear)
   }
   if (req.query.endDay){
-    queryToMake.EndDay = req.query.endDay
+    queryToMake.EndDay = parseInt(req.query.endDay)
   }
   if (req.query.endMonth){
-    queryToMake.EndMonth = req.query.endMonth
+    queryToMake.EndMonth = parseInt(req.query.endMonth)
   }
   if (req.query.endYear){
-    queryToMake.EndYear = req.query.endYear
+    queryToMake.EndYear = parseInt(req.query.endYear)
   }
   if (req.query.region){
     queryToMake.Region = req.query.region
   }
   if (req.query.durationD){
-    queryToMake.DurationD = req.query.durationD
+    queryToMake.DurationD = parseInt(req.query.durationD)
   }
   if (req.query.durationM){
-    queryToMake.DurationM = req.query.durationM
+    queryToMake.DurationM = parseInt(req.query.durationM)
   }
   if (req.query.durationY){
-    queryToMake.DurationY = req.query.durationY
+    queryToMake.DurationY = parseInt(req.query.durationY)
   }
 
   // 2) THE RANGE QUERIES

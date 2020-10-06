@@ -5,6 +5,7 @@ import "../customcss/mystylesheet.css";
 const axios = require('axios');
 
 function AddWar(){
+  const [message, setMessage] = useState("Place");
   const [options, setOptions] = useState(null);
   const [known, setKnown] = useState("");
   const [name, setName] = useState("");
@@ -46,6 +47,7 @@ function AddWar(){
     setEndDate(null);
     setRegion(1);
     document.getElementById("addForm").reset();
+    setMessage("Tiedot lähetettiin onnistuneesti!")
 
   }
   function handleSubmit(event){
@@ -80,10 +82,12 @@ function AddWar(){
         DurationY: durationInYears
     }
     console.log(data);
-    axios.post("http://localhost:3001/wars", data).then(response => response.data);
-    resetDefaultValues();
-
+    axios.post("http://localhost:3001/wars", data).then(response => response.data).then( () => resetDefaultValues())
   }
+  useEffect(() => {
+    setMessage("");
+
+  },[known, name, count, milFatalities, totalFatalities, startDate, endDate, region])
 
   function calculateDays(endYear, endMonth, endDay, startYear, startMonth, startDay){
     let days = 0;
@@ -103,41 +107,43 @@ function AddWar(){
             <tbody>
               <tr>
                 <td>Yleisesti käytössä oleva nimi</td>
-                <td><input type="text" id="known" size="100" onChange={e => setKnown(e.target.value)}/></td>
+                <td><input type="text" id="known" size="50" placeholder="Talvisota" onChange={e => setKnown(e.target.value)}/></td>
               </tr>
               <tr>
-                <td>Sodan osapuolet/nimi</td>
-                <td><input type="text" id="name" size="50" onChange={e => setName(e.target.value)} required/></td>
+                <td className="required">Sodan osapuolet</td>
+                <td><input type="text" id="name" size="50" placeholder="Suomi vs Venäjä" onChange={e => setName(e.target.value)} required/></td>
               </tr>
               <tr>
                 <td>Sotaan osallistuneiden maiden lukumäärä</td>
-                <td><input type="number" id="count" min="1" onChange={e => setCount(e.target.value)}/></td>
+                <td><input type="number" id="count" min="1" placeholder="2" onChange={e => setCount(e.target.value)}/></td>
               </tr>
               <tr>
                 <td>Kuolleiden sotilaiden määrä</td>
-                <td><input type="number" id="milFatalities" min="0" onChange={e => setMilFatalities(e.target.value)}/></td>
+                <td><input type="number" id="milFatalities" min="0" placeholder="10000000" onChange={e => setMilFatalities(e.target.value)}/></td>
               </tr>
               <tr>
                 <td>Kuolleiden määrä yhteensä</td>
-                <td><input type="number" id="totalFatalities" min={milFatalities} onChange={e => setTotalFatalities(e.target.value)}/></td>
+                <td><input type="number" id="totalFatalities" placeholder="10000000" min={milFatalities} onChange={e => setTotalFatalities(e.target.value)}/></td>
               </tr>
               <tr>
-                <td>Sodan aloituspäivämäärä</td>
-                <td><input type="date" id="startDate" onChange={e => setStartDate(e.target.value)} required/></td>
+                <td className="required">Sodan aloitus- ja lopetuspäivämäätä</td>
+                <td><input type="date" id="startDate" onChange={e => setStartDate(e.target.value)} required/> - <input type="date" id="endDate" min={startDate} onChange={e => setEndDate(e.target.value)} required/></td>
               </tr>
               <tr>
-                <td>Sodan lopetuspäivämäärä</td>
-                <td><input type="date" id="endDate" min={startDate} onChange={e => setEndDate(e.target.value)} required/></td>
-              </tr>
-              <tr>
-                <td>Sodan pääasiallinen sijainti</td>
+                <td className="required">Sodan pääasiallinen sijainti</td>
                 <td><select id="region" onChange={e => setRegion(e.target.value)} required> {options} </select>
                 </td>
               </tr>
+              <tr>
+                <td><input type="submit" value="Lähetä tiedot"/></td>
+                <td className="information">Tähdellä merkityt kentät ovat pakollisia</td>
+              </tr>
             </tbody>
           </table>
-          <input type="submit" value="Lähetä tiedot"/>
         </form>
+        <h4 className="confirmationMessage">
+          {message}
+        </h4>
       </div>
   )
 }
