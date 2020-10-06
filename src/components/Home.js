@@ -107,7 +107,9 @@ function Home(){
           Hakuja voi tehdä useilla eri hakuvaihtoehdoilla.<br/>
           Palautettava JSON on muodossa:<br/>
           <div>
-            {JSON.stringify(allData[0], null, 2)}
+            <pre>
+              {JSON.stringify(allData[0], null, 2)}
+            </pre>
           </div>
         </div>
         <div className="homePageBottom">
