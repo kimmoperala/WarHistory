@@ -5,9 +5,7 @@ body{
     background-color: whitesmoke;
 }
 .pageWithoutNav{
-    margin-top: 5%;
-    margin-left: 15%;
-    margin-right: 15%;
+    margin: 5% 15% 5% 15%;
 }
 
 .homePage h1{
@@ -36,7 +34,6 @@ body{
     margin-left: 2%;
 }
 .homePageBottom{
-
 }
 
 .addWar table{
