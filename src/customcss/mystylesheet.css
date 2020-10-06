@@ -38,8 +38,13 @@ body{
 .homePageBottom{
 
 }
-.addWar table {
-    border: solid black 1px;
+
+.addWar table{
+    border-collapse:separate;
+    border-spacing: 0 1em;
+}
+.addWar td{
+    padding-right:10px;
 }
 
 .totalNumbers {
@@ -47,4 +52,18 @@ body{
 }
 .homepicture {
     max-width: 100%;
+}
+
+.required:after {
+    font-size: 1.3em;
+    content:" *";
+    color: red;
+}
+.information {
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.confirmationMessage{
+    color: forestgreen;
 }
