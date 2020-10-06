@@ -148,22 +148,9 @@ function SearchWar(){
   }
 
   function handleDeleteClick(war){
-
     console.log(war._id);
-
-    let data = {
-      _id: war._id
-    }
-    console.log(data);
-    axios.delete('http://localhost:3001/wars', {
-      headers: 
-      { 
-      'Content-type': 'application/json'
-      },
-      _id: war._id
-    }
-    )
-    /*.then(r => {
+    axios.delete('http://localhost:3001/wars/' + war._id)
+    .then(r => {
       if(r.status === 200){
         let temp = {
           variant: "success",
@@ -184,7 +171,7 @@ function SearchWar(){
         setshowEditStatus(true);
       }
 
-    })*/
+    })
     .catch(e => console.log(e))
   }
 

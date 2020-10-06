@@ -154,9 +154,8 @@ app.put("/wars", function(req, res) {
 })
 
 //DELETE a war. Give _id value of the to-be-deleted war.
-app.delete("/wars", function(req, res) {
-  const id = req.body._id
-  console.log(req.body);
+app.delete("/wars/:_id", function(req, res) {
+  const id = req.params._id
   War.findByIdAndRemove(id, function(err, deletedWar) {
     if (err){
       res.status(400).json({ error: 'Error! Remember to give Id to delete' });
