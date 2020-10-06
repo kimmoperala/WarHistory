@@ -38,37 +38,37 @@ function Home(){
       if(el.Region === 1){
         setReg1(reg1 => reg1 + 1)
       }
-      if(el.Region === 2){
+      else if(el.Region === 2){
         setReg2(reg2 => reg2 + 1)
       }
-      if(el.Region === 3){
+      else if(el.Region === 3){
         setReg3(reg3 => reg3 + 1)
       }
-      if(el.Region === 4){
+      else if(el.Region === 4){
         setReg4(reg4 => reg4 + 1)
       }
-      if(el.Region === 5){
+      else if(el.Region === 5){
         setReg5(reg5 => reg5 + 1)
       }
-      if(el.Region === 6){
+      else if(el.Region === 6){
         setReg6(reg6 => reg6 + 1)
       }
-      if(el.Region === 7){
+      else if(el.Region === 7){
         setReg7(reg7 => reg7 + 1)
       }
-      if(el.Region === 8){
+      else if(el.Region === 8){
         setReg8(reg8 => reg8 + 1)
       }
-      if(el.Region === 9){
+      else if(el.Region === 9){
         setReg9(reg9 => reg9 + 1)
       }
-      if(el.Region === 10){
+      else if(el.Region === 10){
         setReg10(reg10 => reg10 + 1)
       }
-      if(el.Region === 11){
+      else if(el.Region === 11){
         setReg11(reg11 => reg11 + 1)
       }
-      if(el.Region === 12){
+      else if(el.Region === 12){
         setReg12(reg12 => reg12 + 1)
       }
     })
@@ -81,7 +81,7 @@ function Home(){
         </h1>
         <p>
           Tällä sivustolla voit hakea tietoa vuosien 1400-2000 välillä käydyistä
-          sodista. Sotia voi hakea esimerkiksia alkamisajankohdalla tai sodan
+          sodista. Sotia voi hakea esimerkiksi alkamisajankohdalla tai sodan
           maantieteellisellä sijainnilla.
         </p>
         <div className="homePageLeft">
@@ -113,7 +113,7 @@ function Home(){
           </div>
         </div>
         <div className="homePageBottom">
-          <img src={picture} className="homepicture" responsive alt="Picture of warfare"/>
+          <img src={picture} className="homepicture" alt="Picture of warfare"/>
         </div>
       </div>
   )
