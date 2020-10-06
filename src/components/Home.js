@@ -4,6 +4,7 @@ import picture from "../img/gladiator-1931077_1280.jpg"
 
 function Home(){
   const [allData, setAllData] = useState([])
+  const [isLoaded, setLoaded] = useState(false)
   const [reg1, setReg1] = useState(0)
   const [reg2, setReg2] = useState(0)
   const [reg3, setReg3] = useState(0)
@@ -26,6 +27,7 @@ function Home(){
           })
           .then(data => {
             setAllData(data)
+            setLoaded(true)
           })
           .catch(error => console.log(error)
           )
@@ -74,6 +76,7 @@ function Home(){
     })
   },[allData])
 
+
   return(
       <div className="homePage">
         <h1>
@@ -82,26 +85,34 @@ function Home(){
         <p>
           Tällä sivustolla voit hakea tietoa vuosien 1400-2000 välillä käydyistä
           sodista. Sotia voi hakea esimerkiksi alkamisajankohdalla tai sodan
-          maantieteellisellä sijainnilla.
+          maantieteellisellä sijainnilla. Tietokanta perustuu Peter Brecken
+          <a href="https://brecke.inta.gatech.edu/research/conflict/" target="_blank" > kokoamaan dataan</a>.
         </p>
+        {!isLoaded &&
+        <div className="loadingText">Lataa tietokantaa<span className="loadingDot">.</span>
+          <span className="loadingDot">.</span><span className="loadingDot">.</span></div>
+        }
         <div className="homePageLeft">
-          Tietokannasta löytyy yhteensä<br/>
-          <span className="totalNumbers">
-            {allData.length}
-          </span> sotaa. Sodat jakautuvat seuraaviin alueisiin:<br/>
-          Pohjois- ja Väli-Amerikka  sekä Karibia <span className="totalNumbers">{reg1}</span> sotaa<br/>
-          Etelä-Amerikka <span className="totalNumbers">{reg2}</span> sotaa<br/>
-          Länsi-Eurooppa <span className="totalNumbers">{reg3}</span> sotaa<br/>
-          Itä-Eurooppa <span className="totalNumbers">{reg4}</span> sotaa<br/>
-          Lähi-Itä <span className="totalNumbers">{reg5}</span> sotaa<br/>
-          Pohjois-Afrikka <span className="totalNumbers">{reg6}</span> sotaa<br/>
-          Keski- ja Länsi-Afrikka <span className="totalNumbers">{reg7}</span> sotaa<br/>
-          Etelä- ja Itä-Afrikka <span className="totalNumbers">{reg8}</span> sotaa<br/>
-          Keski-Aasia <span className="totalNumbers">{reg9}</span> sotaa<br/>
-          Etelä-Aasia <span className="totalNumbers">{reg10}</span> sotaa<br/>
-          Kaakkois-Aasia <span className="totalNumbers">{reg11}</span> sotaa<br/>
-          Itä-Aasia <span className="totalNumbers">{reg12}</span> sotaa<br/>
+          Tietokannasta löytyy yhteensä
+          <p><span className="totalNumbersAll">
+            {allData.length} sotaa
+          </span></p>Sodat jakautuvat seuraaviin alueisiin:<br/>
+          <ul>
+            <li>Pohjois- ja Väli-Amerikka sekä Karibia <span className="totalNumbers">{reg1}</span></li>
+            <li>Etelä-Amerikka <span className="totalNumbers">{reg2}</span></li>
+            <li>Länsi-Eurooppa <span className="totalNumbers">{reg3}</span></li>
+            <li>Itä-Eurooppa <span className="totalNumbers">{reg4}</span></li>
+            <li>Lähi-Itä <span className="totalNumbers">{reg5}</span></li>
+            <li>Pohjois-Afrikka <span className="totalNumbers">{reg6}</span></li>
+            <li> Keski- ja Länsi-Afrikka <span className="totalNumbers">{reg7}</span></li>
+            <li> Etelä- ja Itä-Afrikka <span className="totalNumbers">{reg8}</span></li>
+            <li>Keski-Aasia <span className="totalNumbers">{reg9}</span></li>
+            <li>Etelä-Aasia <span className="totalNumbers">{reg10}</span></li>
+            <li>Kaakkois-Aasia <span className="totalNumbers">{reg11}</span></li>
+            <li>Itä-Aasia <span className="totalNumbers">{reg12}</span></li>
+          </ul>
         </div>
+
         <div className="homePageRight">
           Sivustolla voit tehdä hakuja tietokantaan sekä lisätä uusia sotia.
           Hakuja voi tehdä useilla eri hakuvaihtoehdoilla.<br/>
@@ -113,7 +124,7 @@ function Home(){
           </div>
         </div>
         <div className="homePageBottom">
-          <img src={picture} className="homepicture" alt="Picture of warfare"/>
+          <img src={picture} className="homepicture" alt="Medieval war gear"/>
         </div>
       </div>
   )
