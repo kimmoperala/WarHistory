@@ -52,7 +52,6 @@ function AddWar(){
   }
   function handleSubmit(event){
     event.preventDefault();
-    console.log(known, name, count, milFatalities, totalFatalities, startDate.split("-")[0], endDate, region)
     let startYear = startDate.split("-")[0]
     let startDay = startDate.split("-")[2]
     let startMonth = startDate.split("-")[1]
@@ -82,7 +81,9 @@ function AddWar(){
         DurationY: durationInYears
     }
     console.log(data);
-    axios.post("http://localhost:3001/wars", data).then(response => response.data).then( () => resetDefaultValues())
+    axios.post("http://localhost:3001/wars", data)
+    .then(response => response.data)
+    .then( () => resetDefaultValues())
   }
   useEffect(() => {
     setMessage("");
@@ -136,7 +137,7 @@ function AddWar(){
               </tr>
               <tr>
                 <td><input type="submit" value="Lähetä tiedot"/></td>
-                <td className="information">Tähdellä merkityt kentät ovat pakollisia</td>
+                <td className="information"><span className="redStar">*</span> Tähdellä merkityt kentät ovat pakollisia</td>
               </tr>
             </tbody>
           </table>

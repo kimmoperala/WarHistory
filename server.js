@@ -25,8 +25,8 @@ app.get("/wars", async function(req, res) {
   // Create query for the database depending which fields are present (excluded: countrycode, century, decade)
   let queryToMake = {}
 
+  // 1) THE EXACT QUERIES #####################################################
 
-  // 1) THE EXACT QUERIES
   // Either "Common name" or "Name" has "name" in it
   if (req.query.name){
     queryToMake = {$or:[{"Common Name": {"$regex":req.query.name, "$options":"i"}}, {Name: {"$regex":req.query.name, "$options":"i"}}]}
@@ -71,7 +71,7 @@ app.get("/wars", async function(req, res) {
     queryToMake.DurationY = parseInt(req.query.durationY)
   }
 
-  // 2) THE RANGE QUERIES
+  // 2) THE RANGE QUERIES #####################################################
 
   // Number of actors more or less than X (or equal to X)
   if (req.query.numberActorsMore) {
@@ -109,11 +109,15 @@ app.get("/wars", async function(req, res) {
     queryToMake.EndYear = {$ne:"", $lte: parseInt(req.query.warEnded)}
   }
 
-
   console.log("query ", queryToMake)
   // Make the search with queryToMake
-  const foundWars = await War.find(queryToMake)
-  res.status(200).json(foundWars)
+  War.find(queryToMake)
+      .then(function(foundWars) {
+        res.status(200).json(foundWars)
+      })
+      .catch(function() {
+        res.status(400).json({ error: 'Error!' });
+      })
 })
 
 // // GET war by region (OTHER WAY)
