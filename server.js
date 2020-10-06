@@ -20,11 +20,13 @@ app.use(cors())
 // Routes
 
 // GET war by different parameters, eg. /wars?warStarted=1900&warEnded=1905&numberActors=8
-// if no parameters, GET all wars
+// if no parameters are given, GET all wars
 app.get("/wars", async function(req, res) {
-  // Create query for the database depending which fields are present (excluded: countrycode, milfatalities, century, decade)
-  var queryToMake = {}
+  // Create query for the database depending which fields are present (excluded: countrycode, century, decade)
+  let queryToMake = {}
 
+
+  // 1) THE EXACT QUERIES
   // Either "Common name" or "Name" has "name" in it
   if (req.query.name){
     queryToMake = {$or:[{"Common Name": {"$regex":req.query.name, "$options":"i"}}, {Name: {"$regex":req.query.name, "$options":"i"}}]}
@@ -34,6 +36,9 @@ app.get("/wars", async function(req, res) {
   }
   if (req.query.totalFatalities){
     queryToMake.TotalFatalities = req.query.totalFatalities
+  }
+  if (req.query.milFatalities){
+    queryToMake.MilFatalities = req.query.milFatalities
   }
   if (req.query.startDay){
     queryToMake.StartDay = req.query.startDay
@@ -56,8 +61,6 @@ app.get("/wars", async function(req, res) {
   if (req.query.region){
     queryToMake.Region = req.query.region
   }
-
-  // The EXACT duration
   if (req.query.durationD){
     queryToMake.DurationD = req.query.durationD
   }
@@ -68,26 +71,49 @@ app.get("/wars", async function(req, res) {
     queryToMake.DurationY = req.query.durationY
   }
 
-  // Length of the war in years
+  // 2) THE RANGE QUERIES
+
+  // Number of actors more or less than X (or equal to X)
+  if (req.query.numberActorsMore) {
+    queryToMake.NumberActors = {$gte: parseInt(req.query.numberActorsMore)}
+  }
+  if (req.query.numberActorsLess) {
+    queryToMake.NumberActors = {$ne:"", $lte: parseInt(req.query.numberActorsLess)}
+  }
+  // Military fatalities more or less than X (or equal to X)
+  if (req.query.milFatalitiesMore) {
+    queryToMake.TotalFatalities = {$gte: parseInt(req.query.milFatalitiesMore)}
+  }
+  if (req.query.milFatalitiesLess) {
+    queryToMake.TotalFatalities = {$ne:"", $lte: parseInt(req.query.milFatalitiesLess)}
+  }
+  // Fatalities more or less than X (or equal to X)
+  if (req.query.fatalitiesMore) {
+    queryToMake.MilFatalities = {$gte: parseInt(req.query.fatalitiesMore)}
+  }
+  if (req.query.fatalitiesLess) {
+    queryToMake.MilFatalities = {$ne:"", $lte: parseInt(req.query.fatalitiesLess)}
+  }
+  // Length of the war in years (less or more than X years (or equal to X))
   if (req.query.durationLess){
-    queryToMake.DurationY = {$ne:"", $lte: req.query.durationLess}
+    queryToMake.DurationY = {$ne:"", $lte: parseInt(req.query.durationLess)}
   }
   if (req.query.durationMore){
     queryToMake.DurationY = {$gte: parseInt(req.query.durationMore)}
   }
-
-  // War started on that year or later
+  // WarStarted: War started on that year or later. WarEnded: War ended on that year or earlier
   if (req.query.warStarted){
     queryToMake.StartYear = {$gte: parseInt(req.query.warStarted)}
   }
-  // War ended on that year or earlier
   if (req.query.warEnded){
     queryToMake.EndYear = {$ne:"", $lte: parseInt(req.query.warEnded)}
   }
+
+
   console.log("query ", queryToMake)
-  // Returns wars of that query
+  // Make the search with queryToMake
   const foundWars = await War.find(queryToMake)
-  res.json(foundWars)
+  res.status(200).json(foundWars)
 })
 
 // // GET war by region (OTHER WAY)
@@ -103,11 +129,11 @@ app.post("/wars", function(req, res) {
   console.log(req.body.query)
   War.create(req.body)
       .then(function(newWar) {
-        res.json(newWar)
+        res.status(201).json(newWar)
         console.log("New war added!")
       })
-      .catch(function(err) {
-        res.json(err)
+      .catch(function() {
+        res.status(400).json({ error: 'Error! Remember to add all the required fields: Name, StartYear, EndYear and Region' });
       })
 })
 
@@ -116,9 +142,9 @@ app.put("/wars", function(req, res) {
   const id = req.body._id
   War.findByIdAndUpdate(id, req.body, {new: true}, function(err, updatedWar) {
     if (err) {
-      res.json(err)
+      res.status(400).json({ error: 'Error! Remember to give Id of the war to update and all the fields to be updated' });
     } else {
-      res.json(updatedWar)
+      res.status(200).json(updatedWar)
     }
   })
 })
@@ -128,9 +154,9 @@ app.delete("/wars", function(req, res) {
   const id = req.body._id
   War.findByIdAndRemove(id, function(err, deletedWar) {
     if (err){
-      res.json(err)
+      res.status(400).json({ error: 'Error! Remember to give Id to delete' });
     } else {
-      res.json(deletedWar)
+      res.status(200).json(deletedWar)
     }
   })
 })
