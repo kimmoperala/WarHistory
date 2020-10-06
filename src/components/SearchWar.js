@@ -214,7 +214,7 @@ function SearchWar(){
               <input
                 type="radio"
                 value={region[1]}
-                className="form-check-input"
+                className="form-radio-input"
                 name="regionSelection"
                 onChange={() => handleRadioChange(region)}
               />
