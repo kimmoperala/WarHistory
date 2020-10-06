@@ -5,10 +5,10 @@ import "../customcss/mystylesheet.css";
 
 function SearchWar(){
 
-  const [startYear, setStartYear] = useState("");
-  const [endYear, setEndYear] = useState("");
+  const [startYear, setStartYear] = useState(null);
+  const [endYear, setEndYear] = useState(null);
   const [wars, setWars] = useState(null);
-  const [region, setRegion] = useState("");
+  const [region, setRegion] = useState(null);
   const [editModeIndex, setEditModeIndex] = useState(-1);
   const [regionOptionsForEdit, setRegionsOptionsForEdit] = useState(null);
   
@@ -42,7 +42,25 @@ function SearchWar(){
 
   const handleSearchClick = async () => {
 
-    fetch('http://localhost:3001/wars?warStarted=' + startYear + '&warEnded=' + endYear + '&region=' + region)
+    let url = 'http://localhost:3001/wars';
+
+    if(startYear !== null){
+      url = url + '?warStarted=' + startYear;
+    }
+    if(endYear !== null && startYear === null){
+      url = url + '?warEnded=' + endYear;
+    }else if(endYear !== null && startYear !== null){
+      url = url + '&warEnded=' + endYear;
+    }
+    if(region !== null && startYear === null && endYear === null){
+      url = url + '?region=' + region;
+    }else if(region !== null && (startYear !== null || endYear !== null)){
+      url = url + '&region=' + region;
+    }
+
+    console.log(url);
+
+    fetch(url)
     .then(response => response.json())
     .then(data => {
 
@@ -82,15 +100,18 @@ function SearchWar(){
   }
 
   function getRegionByNumber(number){
-    return regions[number - 1][0];
+    //console.log(number);
+    if (parseInt(number) < 1){
+      return "Aluetta ei löytynyt";
+    }else return regions[parseInt(number) - 1][0];
   }
 
   function getRegionNumberByCommonName(name){
 
   }
 
-  function handleRadioChange(name){
-    setRegion(regions.indexOf(name) + 1)
+  function handleRadioChange(region){
+    setRegion(regions.indexOf(region) + 1)
   }
 
   return(
@@ -132,7 +153,7 @@ function SearchWar(){
                 value={region[1]}
                 className="form-check-input"
                 name="regionSelection"
-                onChange={() => handleRadioChange(region[0])}
+                onChange={() => handleRadioChange(region)}
               />
               {region[0]}
             </label>
@@ -160,13 +181,12 @@ function SearchWar(){
         <tbody>
         {wars.map((war) => (
           <tr key={war._id}>
-            {editModeIndex !== wars.indexOf(war) && <td>{war.CommonName}</td>} {editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.CommonName} onChange={e => setEditableCommonName(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) && <td>{war.Name}</td>} {editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.Name} onChange={e => setEditableName(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{war.StartYear}</td>} {editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.StartYear} onChange={e => setEditableStartYear(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{war.EndYear}</td>} {editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.EndYear} onChange={e => setEditableEndYear(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{getRegionByNumber(war.Region)}</td>} {editModeIndex === wars.indexOf(war) && <td><Form.Control as="select" onChange={e => setEditableRegion(e.target.value)}>{regionOptionsForEdit}</Form.Control></td>} 
-            {editModeIndex !== wars.indexOf(war) &&<td><Button onClick={() => handleEditClick(war)}>Muokkaa</Button></td>} 
-            {editModeIndex === wars.indexOf(war) && <td><Button variant="success" onClick={() => handleConfirmClick(war)}>&#9745;</Button> <Button variant="danger" onClick={() => handleCancelClick()}>&#9746;</Button></td>}
+            {editModeIndex !== wars.indexOf(war) && <td>{war.CommonName}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.CommonName} onChange={e => setEditableCommonName(e.target.value)}/></td>}
+            {editModeIndex !== wars.indexOf(war) && <td>{war.Name}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.Name} onChange={e => setEditableName(e.target.value)}/></td>}
+            {editModeIndex !== wars.indexOf(war) &&<td>{war.StartYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.StartYear} onChange={e => setEditableStartYear(e.target.value)}/></td>}
+            {editModeIndex !== wars.indexOf(war) &&<td>{war.EndYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.EndYear} onChange={e => setEditableEndYear(e.target.value)}/></td>}
+            {editModeIndex !== wars.indexOf(war) &&<td>{getRegionByNumber(war.Region)}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control as="select" onChange={e => setEditableRegion(e.target.value)}>{regionOptionsForEdit}</Form.Control></td>}
+            {editModeIndex !== wars.indexOf(war) &&<td><Button onClick={() => handleEditClick(war)}>Muokkaa</Button></td>}{editModeIndex === wars.indexOf(war) && <td><Button variant="success" onClick={() => handleConfirmClick(war)}>&#9745;</Button><Button variant="danger" onClick={() => handleCancelClick()}>&#9746;</Button></td>}
           </tr>
         ))}
         </tbody>
