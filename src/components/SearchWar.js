@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Form, Col, Row, Button, Table } from "react-bootstrap";
+import { Form, Col, Row, Button, Table, Alert } from "react-bootstrap";
 import "../customcss/mystylesheet.css";
+
+const axios = require('axios');
 
 function SearchWar(){
 
@@ -17,6 +19,13 @@ function SearchWar(){
   const [editableStartYear, setEditableStartYear] = useState("");
   const [editableEndYear, setEditableEndYear] = useState("");
   const [editableRegion, setEditableRegion] = useState(null);
+
+  const [requestActive, setrequestActive] = useState(false);
+  const [showEditStatus, setshowEditStatus] = useState(false);
+  const [alertConfig, setAlertConfig] = useState({
+    variant: "warning",
+    text: ""
+  });
 
   const regions = [
     ["Pohjois- ja Väli-Amerikka sekä Karibia", 1],
@@ -42,6 +51,7 @@ function SearchWar(){
 
   const handleSearchClick = async (e) => {
     e.preventDefault();
+    setrequestActive(true);
     let url = 'http://localhost:3001/wars';
 
     if(startYear !== null){
@@ -63,7 +73,7 @@ function SearchWar(){
     fetch(url)
     .then(response => response.json())
     .then(data => {
-
+      setrequestActive(false);
       setWars(data);
       console.log(data)
     })
@@ -78,39 +88,87 @@ function SearchWar(){
     setEndYear("");
   }
 
+  function handleEmptySearch(){
+    setEditModeIndex(-1);
+    setWars(null);
+  }
+
   function handleEditClick(war){
     
     setEditableCommonName(war.CommonName);
     setEditableName(war.Name);
     setEditableStartYear(war.StartYear);
     setEditableEndYear(war.EndYear);
-    //setEditableRegion();
+    setEditableRegion(war.Region);
 
     setEditModeIndex(wars.indexOf(war));
   }
 
-  function handleConfirmClick(war){
-    wars[wars.indexOf(war)].CommonName = editableCommonName;
-    wars[wars.indexOf(war)].Name = editableName;
-    wars[wars.indexOf(war)].StartYear = editableStartYear;
-    wars[wars.indexOf(war)].EndYear = editableEndYear;
-    //wars[wars.indexOf(war)].Region = getRegionNumberByCommonName(editableRegion);
+  const handleConfirmClick = async (war) => {
+    
+    war.CommonName = editableCommonName;
+    war.Name = editableName;
+    war.StartYear = editableStartYear;
+    war.EndYear = editableEndYear;
+    war.Region = editableRegion;
     setEditModeIndex(-1);
+    console.log(war);
+    axios.put('http://localhost:3001/wars', 
+    {
+      "_id": war._id,
+      "Name": war.Name,
+      "CommonName": war.CommonName,
+      "StartYear": war.StartYear,
+      "EndYear": war.EndYear,
+      "Region": war.Region
+    })
+    .then(r => {
+      if(r.status === 200){
+        let temp = {
+          variant: "success",
+          text: "Tiedot päivitetty onnistuneesti"
+        }
+        setAlertConfig(temp);
+        setshowEditStatus(true);
+      }else{
+        let temp = {
+          variant: "danger",
+          text: "Jokin meni vikaan tietoja päivitettäessä"
+        }
+        setAlertConfig(temp);
+        setshowEditStatus(true);
+      }
+
+    })
+    .catch(e => console.log(e))
   }
 
   function handleCancelClick(){
     setEditModeIndex(-1);
   }
 
-  function getRegionByNumber(number){
-    //console.log(number);
-    if (parseInt(number) < 1){
-      return "Aluetta ei löytynyt";
-    }else return regions[parseInt(number) - 1][0];
+  function handleDeleteClick(war){
+
+
+    let tempWars = Array.from(wars);
+    tempWars.splice(tempWars.indexOf(war), 1);
+    setWars(tempWars);
+
+
   }
 
-  function getRegionNumberByCommonName(name){
+  function getRegionByNumber(number){
 
+    if(number === null){
+      return "Aluetta ei löytynyt";
+    }
+
+    for(let i=0; i<regions.length;i++){
+      if(parseInt(number) === regions[i][1]){
+        return regions[i][0];
+      }
+    }
+    return "Aluetta ei löytynyt";
   }
 
   function handleRadioChange(region){
@@ -119,24 +177,25 @@ function SearchWar(){
 
   return(
     <div className="searchWarTop">
+
       <h2>
         ETSI SOTA!
       </h2>
       <Form onSubmit={e => handleSearchClick(e)}>
         <Form.Group as={Row}>
           <Form.Group as={Col} md="3">
-            <Form.Label>Aloitus vuosi</Form.Label>
+            <Form.Label>Sota lakanut aikaisintaan:</Form.Label>
             <Form.Control
               name="warYears"
               type="number"
-              min="1400"
+              min="1"
               onChange={e => setStartYear(e.target.value)}
             />
 
           </Form.Group>
 
           <Form.Group as={Col} md="3">
-            <Form.Label>Lopetus vuosi</Form.Label>
+            <Form.Label>Sota loppunut viimeistään:</Form.Label>
             <Form.Control
               name="warYears"
               type="number"
@@ -145,7 +204,7 @@ function SearchWar(){
             />
           </Form.Group>
         </Form.Group>
-
+    
         <Form.Group as={Col} controlId="formSearchRegion">
           <Form.Label>Etsi alueiden perusteella</Form.Label>
           {regions.map((region)=>(
@@ -166,36 +225,47 @@ function SearchWar(){
         </Form.Group>
 
         <Form.Group>
-          <Button type="submit">Hae</Button> <Button variant="outline-danger" onClick={handleEmptyClick}>Tyhjennä</Button>
+          <Button type="submit" disabled={requestActive}>Hae</Button> <Button variant="outline-danger" onClick={handleEmptyClick}>Tyhjennä</Button>
         </Form.Group>
       </Form>
 
+      <Alert variant={alertConfig.variant} show={showEditStatus} onClose={() => setshowEditStatus(false)} dismissible>
+        <p>
+          {alertConfig.text}
+        </p>
+      </Alert>
+
       {wars &&
-      <div className="resTable">
-      <Table bordered className="searchResultTable" striped>
-        <thead>
-          <tr>
-            <th>Nimi</th>
-            <th>Sodan osapuolet/Nimi</th>
-            <th>Aloitusvuosi</th>
-            <th>Lopetusvuosi</th>
-            <th>Pääasiallinen sota-alue</th>
-            <th>Muokkaa</th>
-          </tr>
-        </thead>
-        <tbody>
-        {wars.map((war) => (
-          <tr key={war._id}>
-            {editModeIndex !== wars.indexOf(war) && <td>{war.CommonName}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.CommonName} onChange={e => setEditableCommonName(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) && <td>{war.Name}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.Name} onChange={e => setEditableName(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{war.StartYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" min="1400" max={editableEndYear} defaultValue={war.StartYear} onChange={e => setEditableStartYear(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{war.EndYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" min={editableStartYear} defaultValue={war.EndYear} onChange={e => setEditableEndYear(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{getRegionByNumber(war.Region)}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control as="select" onChange={e => setEditableRegion(e.target.value)}>{regionOptionsForEdit}</Form.Control></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td><Button onClick={() => handleEditClick(war)}>Muokkaa</Button></td>}{editModeIndex === wars.indexOf(war) && <td><Button variant="success" onClick={() => handleConfirmClick(war)}>&#9745;</Button><Button variant="danger" onClick={() => handleCancelClick()}>&#9746;</Button></td>}
-          </tr>
-        ))}
-        </tbody>
-      </Table>
+      <div>
+        <Button variant="outline-danger"onClick={handleEmptySearch}>Poista hakutulokset</Button>
+        <div className="resTable">
+        <Table bordered className="searchResultTable" striped>
+          <thead>
+            <tr>
+              <th>Nimi</th>
+              <th>Sodan osapuolet/Nimi</th>
+              <th>Aloitusvuosi</th>
+              <th>Lopetusvuosi</th>
+              <th>Pääasiallinen sota-alue</th>
+              <th>Muokkaa</th>
+              <th>Poista</th>
+            </tr>
+          </thead>
+          <tbody>
+          {wars.map((war) => (
+            <tr key={war._id}>
+              {editModeIndex !== wars.indexOf(war) && <td>{war.CommonName}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.CommonName} onChange={e => setEditableCommonName(e.target.value)}/></td>}
+              {editModeIndex !== wars.indexOf(war) && <td>{war.Name}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.Name} onChange={e => setEditableName(e.target.value)}/></td>}
+              {editModeIndex !== wars.indexOf(war) &&<td>{war.StartYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" min="1400" max={editableEndYear} defaultValue={war.StartYear} onChange={e => setEditableStartYear(e.target.value)}/></td>}
+              {editModeIndex !== wars.indexOf(war) &&<td>{war.EndYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" min={editableStartYear} defaultValue={war.EndYear} onChange={e => setEditableEndYear(e.target.value)}/></td>}
+              {editModeIndex !== wars.indexOf(war) &&<td>{getRegionByNumber(war.Region)}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control as="select" defaultValue={war.Region} onChange={e => setEditableRegion(e.target.value)}>{regionOptionsForEdit}</Form.Control></td>}
+              {editModeIndex !== wars.indexOf(war) &&<td><Button onClick={() => handleEditClick(war)}>Muokkaa</Button></td>}{editModeIndex === wars.indexOf(war) && <td><Button variant="success" onClick={() => handleConfirmClick(war)}>&#9745;</Button><Button variant="danger" onClick={() => handleCancelClick()}>&#9746;</Button></td>}
+              {<td><Button variant="danger" onClick={() => handleDeleteClick(war)}>Poista</Button></td>}
+            </tr>
+          ))}
+          </tbody>
+        </Table>
+        </div>
       </div>
       }
     </div>
