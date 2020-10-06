@@ -54,7 +54,7 @@ body{
     max-width: 100%;
 }
 
-.required:after {
+.required:after, .redStar {
     font-size: 1.3em;
     content:" *";
     color: red;

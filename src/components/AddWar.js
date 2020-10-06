@@ -136,7 +136,7 @@ function AddWar(){
               </tr>
               <tr>
                 <td><input type="submit" value="Lähetä tiedot"/></td>
-                <td className="information">Tähdellä merkityt kentät ovat pakollisia</td>
+                <td className="information"><span className="redStar">*</span>Tähdellä merkityt kentät ovat pakollisia</td>
               </tr>
             </tbody>
           </table>
