@@ -187,8 +187,8 @@ function SearchWar(){
           <tr key={war._id}>
             {editModeIndex !== wars.indexOf(war) && <td>{war.CommonName}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.CommonName} onChange={e => setEditableCommonName(e.target.value)}/></td>}
             {editModeIndex !== wars.indexOf(war) && <td>{war.Name}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="text" defaultValue={war.Name} onChange={e => setEditableName(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{war.StartYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" defaultValue={war.StartYear} onChange={e => setEditableStartYear(e.target.value)}/></td>}
-            {editModeIndex !== wars.indexOf(war) &&<td>{war.EndYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" defaultValue={war.EndYear} onChange={e => setEditableEndYear(e.target.value)}/></td>}
+            {editModeIndex !== wars.indexOf(war) &&<td>{war.StartYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" min="1400" max={editableEndYear} defaultValue={war.StartYear} onChange={e => setEditableStartYear(e.target.value)}/></td>}
+            {editModeIndex !== wars.indexOf(war) &&<td>{war.EndYear}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control type="number" min={editableStartYear} defaultValue={war.EndYear} onChange={e => setEditableEndYear(e.target.value)}/></td>}
             {editModeIndex !== wars.indexOf(war) &&<td>{getRegionByNumber(war.Region)}</td>}{editModeIndex === wars.indexOf(war) && <td><Form.Control as="select" onChange={e => setEditableRegion(e.target.value)}>{regionOptionsForEdit}</Form.Control></td>}
             {editModeIndex !== wars.indexOf(war) &&<td><Button onClick={() => handleEditClick(war)}>Muokkaa</Button></td>}{editModeIndex === wars.indexOf(war) && <td><Button variant="success" onClick={() => handleConfirmClick(war)}>&#9745;</Button><Button variant="danger" onClick={() => handleCancelClick()}>&#9746;</Button></td>}
           </tr>
