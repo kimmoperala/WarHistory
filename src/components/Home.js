@@ -88,15 +88,13 @@ function Home(){
           maantieteellisellä sijainnilla. Tietokanta perustuu Peter Brecken
           <a href="https://brecke.inta.gatech.edu/research/conflict/" target="_blank" > kokoamaan dataan</a>.
         </p>
-        {!isLoaded &&
-        <div className="loadingText">Lataa tietokantaa<span className="loadingDot">.</span>
-          <span className="loadingDot">.</span><span className="loadingDot">.</span></div>
-        }
+
         <div className="homePageLeft">
           Tietokannasta löytyy yhteensä
           <p><span className="totalNumbersAll">
             {allData.length} sotaa
-          </span></p>Sodat jakautuvat seuraaviin alueisiin:<br/>
+          </span></p>
+          Sodat jakautuvat seuraaviin alueisiin:<br/>
           <ul>
             <li>Pohjois- ja Väli-Amerikka sekä Karibia <span className="totalNumbers">{reg1}</span></li>
             <li>Etelä-Amerikka <span className="totalNumbers">{reg2}</span></li>
@@ -117,11 +115,17 @@ function Home(){
           Sivustolla voit tehdä hakuja tietokantaan sekä lisätä uusia sotia.
           Hakuja voi tehdä useilla eri hakuvaihtoehdoilla.<br/>
           Palautettava JSON on muodossa:<br/>
-          <div>
+            {!isLoaded &&
+            <div className="loadingText">Lataa tietokantaa<span className="loadingDot">.</span>
+              <span className="loadingDot">.</span><span className="loadingDot">.</span></div>
+            }
+            {isLoaded &&
+            <div className="jsonText">
             <pre>
               {JSON.stringify(allData[0], null, 2)}
             </pre>
-          </div>
+            </div>
+            }
         </div>
         <div className="homePageBottom">
           <img src={picture} className="homepicture" alt="Medieval war gear"/>
