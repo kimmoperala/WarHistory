@@ -78,25 +78,25 @@ app.get("/wars", async function(req, res) {
     queryToMake.NumberActors = {$gte: parseInt(req.query.numberActorsMore)}
   }
   if (req.query.numberActorsLess) {
-    queryToMake.NumberActors = {$ne:"", $lte: parseInt(req.query.numberActorsLess)}
+    queryToMake.NumberActors = {$ne:-1, $lte: parseInt(req.query.numberActorsLess)}
   }
   // Military fatalities more or less than X (or equal to X)
   if (req.query.milFatalitiesMore) {
     queryToMake.TotalFatalities = {$gte: parseInt(req.query.milFatalitiesMore)}
   }
   if (req.query.milFatalitiesLess) {
-    queryToMake.TotalFatalities = {$ne:"", $lte: parseInt(req.query.milFatalitiesLess)}
+    queryToMake.TotalFatalities = {$ne:-1, $lte: parseInt(req.query.milFatalitiesLess)}
   }
   // Fatalities more or less than X (or equal to X)
   if (req.query.fatalitiesMore) {
     queryToMake.MilFatalities = {$gte: parseInt(req.query.fatalitiesMore)}
   }
   if (req.query.fatalitiesLess) {
-    queryToMake.MilFatalities = {$ne:"", $lte: parseInt(req.query.fatalitiesLess)}
+    queryToMake.MilFatalities = {$ne:-1, $lte: parseInt(req.query.fatalitiesLess)}
   }
   // Length of the war in years (less or more than X years (or equal to X))
   if (req.query.durationLess){
-    queryToMake.DurationY = {$ne:"", $lte: parseInt(req.query.durationLess)}
+    queryToMake.DurationY = {$ne:-1, $lte: parseInt(req.query.durationLess)}
   }
   if (req.query.durationMore){
     queryToMake.DurationY = {$gte: parseInt(req.query.durationMore)}
@@ -106,7 +106,7 @@ app.get("/wars", async function(req, res) {
     queryToMake.StartYear = {$gte: parseInt(req.query.warStarted)}
   }
   if (req.query.warEnded){
-    queryToMake.EndYear = {$ne:"", $lte: parseInt(req.query.warEnded)}
+    queryToMake.EndYear = {$ne:-1, $lte: parseInt(req.query.warEnded)}
   }
 
   console.log("query ", queryToMake)
