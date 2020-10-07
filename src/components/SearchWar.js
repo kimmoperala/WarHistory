@@ -205,7 +205,7 @@ function SearchWar(){
     <div className="searchWarTop">
 
       <h2>
-        ETSI SOTA!
+        Sotahaku
       </h2>
       <Form onSubmit={e => handleSearchClick(e)}>
         <Form.Group as={Row}>
