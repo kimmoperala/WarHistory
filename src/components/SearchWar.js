@@ -202,7 +202,7 @@ function SearchWar(){
       <Form onSubmit={e => handleSearchClick(e)}>
         <Form.Group as={Row}>
           <Form.Group as={Col} md="3">
-            <Form.Label>Sota lakanut aikaisintaan:</Form.Label>
+            <Form.Label>Sota alkanut aikaisintaan:</Form.Label>
             <Form.Control
               name="warYears"
               type="number"
