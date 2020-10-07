@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Form, Col, Row, Button, Table, Alert } from "react-bootstrap";
+import { Form, Col, Row, Button, Table, Alert, Spinner } from "react-bootstrap";
 import "../customcss/mystylesheet.css";
 
 const axios = require('axios');
@@ -260,7 +260,7 @@ function SearchWar(){
           {alertConfig.text}
         </p>
       </Alert>
-
+      {requestActive && <Spinner animation="border" />}
       {wars &&
       <div>
         <Button variant="outline-danger"onClick={handleEmptySearch}>Poista hakutulokset</Button>
