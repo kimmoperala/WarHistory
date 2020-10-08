@@ -1,68 +1,226 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# API
 
-## Available Scripts
+**Show wars**
+---
+Returns json of wars
 
-In the project directory, you can run:
+* **URL**
 
-### `npm start`
+    /wars
+    
+* **Method**
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    GET
+    
+* **Query parameters**
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+    * Exact parameters
 
-### `npm test`
+        commonName type: string
+        
+        name type: string
+        
+        numberActors type: integer
+        
+        totalFatalities type: integer
+    
+        milFatalities type: integer
+        
+        startDay type: integer
+        
+        startMonth type: integer
+        
+        startYear type: integer
+        
+        endDay type: integer
+            
+        endMonth type: integer
+            
+        endYear type: integer
+        
+        region type: integer
+        
+        durationD type: integer
+        
+        durationM type: integer
+        
+        durationY type: integer
+    
+    * Range parameters
+    
+        numberActorsMore type: integer
+    
+        numberActorsLess type: integer
+        
+        milFatalitiesMore type: integer
+        
+        milFatalitiesLess type: integer
+        
+        fatalitiesMore type: integer
+        
+        fatalitiesLess type: integer
+        
+        durationLess type: integer
+        
+        durationMore type: integer
+        
+        warStarted type: integer
+        
+        warEnded type: integer
+    
+* **Response**
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    * **Content**: `[
+    {"_id":"5f7d7e5bbfe64122bc2d01bf",
+    "CommonName":"Invasion of Edigey?",
+    "Name":"Muscovy-Volga, Tartars, 1406-08",
+    "CountryCode":"-1",
+    "NumberActors":3,
+    "MilFatalities":-1,
+    "TotalFatalities":1200,
+    "StartYear":1406,
+    "StartMonth":-1,
+    "StartDay":-1,
+    "EndYear":1408,
+    "EndMonth":-1,
+    "EndDay":-1,
+    "Region":4,
+    "Century":1,
+    "Decade":140,
+    "DurationD":-1,
+    "DurationM":-1,
+    "DurationY":2},
+    {War 2 JSON}...
+    ]
+    `
+    
+    * **Status code**
+    
+    200 if succeeded
+    
+    400 if invalid fields
+    
+ 
+**Add war**
+----
 
-### `npm run build`
+Adds a war to list and returns json of added war
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* **URL**
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+    /wars
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* **Method:**
+  
+    POST
 
-### `npm run eject`
+* **Data:**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    {
+    
+    commonName: "commonName" type: string
+            
+    name: "name" type: string REQUIRED
+            
+    numberActors: "numberActors" type: integer
+            
+    totalFatalities: "totalFatalities" type: integer
+        
+    milFatalities: "milFatalities" type: integer
+            
+    startDay: "startDay" type: integer
+            
+    startMonth: "startMonth" type: integer
+            
+    startYear: "startYear" type: integer REQUIRED
+            
+    endDay: "endDay" type: integer
+                
+    endMonth: "endMonth" type: integer
+                
+    endYear: "endYear" type: integer REQUIRED
+            
+    region: "region" type: integer REQUIRED
+            
+    durationD: "durationD" type: integer
+            
+    durationM: "durationM" type: integer
+       
+    durationY: "durationY" type: integer
+    
+    }
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* **Response:**
+  
+     * **Content:**
+      
+     `{JSON of new war}`
+     
+     * **Status code:**
+     
+     201 if new war created
+     
+     400 if invalid data
+     
+**Update war**
+----
+Updates war and returns JSON of updated war
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* **URL**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    /wars
+    
+* **Method:**
 
-## Learn More
+    PUT
+    
+* **Data:**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    {
+    
+    _id: "id" type: string REQUIRED
+    
+     all fields that needs to be updates. (check all fields from Add war)
+    
+    }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* **Response**
 
-### Code Splitting
+    * **Content:** 
+    
+    `{Updated War JSON}`
+    
+    * **Status code**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+    200 if updated
+    
+    400 if invalid data
+    
+**Delete war**
+----
 
-### Analyzing the Bundle Size
+Delete war from database
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+* **URL**
 
-### Making a Progressive Web App
+    /wars/:id
+    
+* **Method:**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+    DELETE
+    
+* **URL params**
 
-### Advanced Configuration
+    id wars _id type: string
+    
+* **Response**
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+    * **Content:**
+    
+    `{Deleted War JSON}`
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    **Status code**: 
+    
+    204 if war deleted
+    
+    400 if invalid data

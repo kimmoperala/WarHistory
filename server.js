@@ -160,7 +160,7 @@ app.delete("/wars/:_id", function(req, res) {
     if (err){
       res.status(400).json({ error: 'Error! Remember to give Id to delete' });
     } else {
-      res.status(200).json(deletedWar)
+      res.status(204).json(deletedWar)
     }
   })
 })
