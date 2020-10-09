@@ -14,9 +14,7 @@ Returns json of wars
     
 * **Query parameters**
 
-    * Exact parameters
-
-        commonName type: string
+    * Exact parameters:
         
         name type: string
         
@@ -46,7 +44,7 @@ Returns json of wars
         
         durationY type: integer
     
-    * Range parameters
+    * Range parameters:
     
         numberActorsMore type: integer
     
