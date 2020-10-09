@@ -6,7 +6,6 @@ const url = require('url')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 const uri = process.env.REACT_APP_DB_CONNECTION
-// const router = express.Router()
 const War = require('./src/schema')
 
 const cors = require('cors')
@@ -17,8 +16,6 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}) )
 app.use(cors())
 
-// Routes
-
 // GET war by different parameters, eg. /wars?warStarted=1900&warEnded=1905&numberActors=8
 // if no parameters are given, GET all wars
 app.get("/wars", async function(req, res) {
@@ -27,9 +24,35 @@ app.get("/wars", async function(req, res) {
 
   // 1) THE EXACT QUERIES #####################################################
 
-  // Either "Common name" or "Name" has "name" in it
-  if (req.query.name){
-    queryToMake = {$or:[{"Common Name": {"$regex":req.query.name, "$options":"i"}}, {Name: {"$regex":req.query.name, "$options":"i"}}]}
+  if (req.query.name) {
+    let name_values = req.query.name.split(" ")
+    console.log("values", name_values, name_values.length)
+
+    //If two search words
+    if (name_values.length === 2) {
+      queryToMake = {
+        $and: [
+          { // Either "Common name" or "Name" has first and second search word in it
+            $or: [
+              {
+                CommonName: {
+                  $regex: name_values[0],
+                  $options: 'i'
+                }
+              }, {Name: {$regex: name_values[0], $options: 'i'}}]
+          },
+          {
+            $or: [
+              {CommonName: {$regex: name_values[1], $options: 'i'}},
+              {Name: {$regex: name_values[1], $options: 'i'}}]
+          }]
+      }
+    }     //If one search word
+    else {
+      // Either "Common name" or "Name" has search word in it
+      queryToMake = {$or:[{CommonName: {"$regex":req.query.name, "$options":"i"}}, {Name: {"$regex":req.query.name, "$options":"i"}}]}
+    }
+
   }
   if (req.query.numberActors){
     queryToMake.NumberActors = parseInt(req.query.numberActors)
@@ -120,14 +143,6 @@ app.get("/wars", async function(req, res) {
       })
 })
 
-// // GET war by region (OTHER WAY)
-// app.get("/wars/regions/:region", async function(req, res) {
-//   const region = req.params.region
-//   console.log("reg ", region)
-//   const warsInRegion = await War.find({Region: region})
-//   res.send(warsInRegion)
-// })
-
 // CREATE new war. Give the new war in json format with all the required fields
 app.post("/wars", function(req, res) {
   console.log(req.body.query)
@@ -158,9 +173,9 @@ app.delete("/wars/:_id", function(req, res) {
   const id = req.params._id
   War.findByIdAndRemove(id, function(err, deletedWar) {
     if (err){
-      res.status(400).json({ error: 'Error! Remember to give Id to delete' });
+      res.status(400).json({ error: 'Error! Remember to give Id of the war to delete' });
     } else {
-      res.status(204).json(deletedWar)
+      res.status(200).json(deletedWar)
     }
   })
 })

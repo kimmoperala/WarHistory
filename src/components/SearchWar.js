@@ -7,6 +7,7 @@ const axios = require('axios');
 
 function SearchWar(){
 
+  const [name, setName] = useState(null);
   const [startYear, setStartYear] = useState(null);
   const [endYear, setEndYear] = useState(null);
   const [wars, setWars] = useState(null);
@@ -49,22 +50,28 @@ function SearchWar(){
     setRegionsOptionsForEdit(temp);
   }, [])
 
+
   const handleSearchClick = async (e) => {
     e.preventDefault();
     setrequestActive(true);
     let url = 'http://localhost:3001/wars';
 
-    if(startYear !== null){
-      url = url + '?warStarted=' + startYear;
+    if(name != null){
+      url = url + '?name=' + name;
     }
-    if(endYear !== null && startYear === null){
+    if (startYear !== null && name === null){
+      url = url + '?warStarted=' + startYear;
+    } else if(startYear !== null && name !== null){
+      url = url + '&warStarted=' + startYear;
+    }
+    if(endYear !== null && startYear === null && name === null){
       url = url + '?warEnded=' + endYear;
-    }else if(endYear !== null && startYear !== null){
+    }else if(endYear !== null && (startYear !== null || name !== null)){
       url = url + '&warEnded=' + endYear;
     }
-    if(region !== null && startYear === null && endYear === null){
+    if(region !== null && startYear === null && endYear === null && name === null){
       url = url + '?region=' + region;
-    }else if(region !== null && (startYear !== null || endYear !== null)){
+    }else if(region !== null && (startYear !== null || endYear !== null || name !== null)){
       url = url + '&region=' + region;
     }
 
@@ -77,12 +84,15 @@ function SearchWar(){
       setWars(data);
       console.log(data)
     })
-    .catch(error => console.log(error))
+    .catch(error => console.log(error.status))
   }
 
   function handleEmptyClick(){
     Array.from( document.querySelectorAll('input[name="regionSelection"]:checked'), input => input.checked = false );
+    Array.from( document.querySelectorAll('input[name="regionSelection"]:checked'), input => input.checked = false );
     Array.from( document.querySelectorAll('input[name="warYears"]'), input => input.value = "" );
+    Array.from(document.querySelectorAll('input[name="warName"]'), input => input.value = "")
+    setName(null)
     setRegion(null);
     setStartYear("");
     setEndYear("");
@@ -208,7 +218,21 @@ function SearchWar(){
         Sotahaku
       </h2>
       <Form onSubmit={e => handleSearchClick(e)}>
+        {/*This part is Kimmo's late addition*/}
         <Form.Group as={Row}>
+          <Form.Group as={Col} md="12">
+            <Form.Label>Sodan nimi:</Form.Label>
+            <Form.Control
+                name="warName"
+                type="text"
+                placeholder="Enintään 2 hakusanaa"
+                onChange={e => setName(e.target.value)}
+            />
+          </Form.Group>
+        </Form.Group> {/*addition ends*/}
+
+        <Form.Group as={Row}>
+
           <Form.Group as={Col} md="3">
             <Form.Label>Sota alkanut aikaisintaan:</Form.Label>
             <Form.Control
