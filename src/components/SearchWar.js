@@ -161,7 +161,7 @@ function SearchWar(){
     console.log(war._id);
     axios.delete('http://localhost:3001/wars/' + war._id)
     .then(r => {
-      if(r.status === 200){
+      if(r.status === 204){
         let temp = {
           variant: "success",
           text: "Tiedot päivitetty onnistuneesti"
