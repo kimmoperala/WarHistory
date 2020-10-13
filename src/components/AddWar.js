@@ -127,7 +127,7 @@ function AddWar(){
                 <td><input type="number" id="totalFatalities" placeholder="10000000" min={milFatalities} onChange={e => setTotalFatalities(e.target.value)}/></td>
               </tr>
               <tr>
-                <td className="required">Sodan aloitus- ja lopetuspäivämäätä</td>
+                <td className="required">Sodan aloitus- ja lopetuspäivämäärä</td>
                 <td><input type="date" id="startDate" onChange={e => setStartDate(e.target.value)} required/> - <input type="date" id="endDate" min={startDate} onChange={e => setEndDate(e.target.value)} required/></td>
               </tr>
               <tr>
